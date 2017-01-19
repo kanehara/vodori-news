@@ -1,0 +1,11 @@
+{
+  "name": "VodoriNews",
+  "version": "1.0.0",
+  "description": "VodoriNews dependencies.",
+  "scripts": {},
+  "dependencies": {
+    "atlas-connect": "^0.6.5",
+    "ngrok": "^2.2.5",
+    "redis": "^2.6.5"
+  }
+}

@@ -1,0 +1,5 @@
+1. Run 'nvm install'
+2. Run 'npm install'
+3. Start an ngrok server: 'ngrok http 3000'
+4. Copy the ngrok url and paste it under 'localBaseUrl' in config.json in the directory 'vodori-news-api'
+5. Start the redis server: 'redis-server'
