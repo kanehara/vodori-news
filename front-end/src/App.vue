@@ -29,7 +29,7 @@ a
   text-decoration none
 
 .header
-  background-color lightgray
+  background-color rgb(250, 170, 0)
   position fixed
   z-index 999
   height 55px
