@@ -33,7 +33,7 @@ import Comment from '../components/Comment.vue'
 
 function fetchItem (store) {
   return store.dispatch('FETCH_ITEMS', {
-    ids: [store.state.route.params.id]
+    ids: ['test']
   })
 }
 
