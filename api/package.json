@@ -1,11 +1,11 @@
 {
-  "name": "VodoriNews",
+  "name": "vodori-news-hapi",
   "version": "1.0.0",
-  "description": "VodoriNews dependencies.",
-  "scripts": {},
+  "description": "Vodori News running on a Hapi Server.",
+  "main": "index.js",
+  "license": "ISC",
   "dependencies": {
-    "atlas-connect": "^0.6.5",
-    "ngrok": "^2.2.5",
-    "redis": "^2.6.5"
+    "axios": "^0.15.3",
+    "hapi": "^16.1.0"
   }
 }
