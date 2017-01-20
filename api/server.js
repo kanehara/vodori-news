@@ -21,18 +21,15 @@ let host = 'https://api.hipchat.com';
  */
 let authToken = 'GlzFESyyJmiOSdZSNBPb0KyYmv7qr6zTwFgbAkUl';   // Expires January 19th, 2018
 
-// let roomNumber = '3502399';     // Test Room
-let roomNumber = '1839723';     // All the People Room
+// let defaultRoomNumber = '3502399';     // Test Room
+let defaultRoomNumber = '1839723';     // All the People Room
 
 /**
  * Message history url parameters
  */
-let messagePath = '/v2/room/' + roomNumber + '/history';
-let maxResults = 1000;
+let maxResults = 100;
 let reverse = false;
 let messagesQueryParameters = '?reverse=' + reverse + '&max-results=' + maxResults + '&auth_token=' + authToken;
-let messagesUrl = host + messagePath + messagesQueryParameters;
-let messageUrl = host + messagePath;
 
 /**
  * Cache parameters
@@ -78,9 +75,10 @@ let httpGet = function(url) {
  * Create an array of link objects from an array of message objects.
  *
  * @param messages - array of message objects
+ * @param messageBaseApiUrl - api message url for the current room
  * @returns {Promise.<*>} - promise containing an array of link objects
  */
-let extractLinkyLinks = function(messages) {
+let extractLinkyLinks = function(messages, messageBaseApiUrl) {
     let linkObjectPromises = [];
 
     for(let i = 0; i < messages.length; i++) {
@@ -89,10 +87,10 @@ let extractLinkyLinks = function(messages) {
             // Extract the message id that the linky link belongs to
             let messageId = messages[i]['attach_to'];
             // Create api url to get original message details from the linky link
-            let fullMessageUrl = messageUrl + '/' + messageId + '?auth_token=' + authToken
+            let messageFullApiUrl = messageBaseApiUrl + '/' + messageId + '?auth_token=' + authToken;
 
             // Push our link object to our array of links
-            linkObjectPromises.push(createLinkObject(messages[i], fullMessageUrl));
+            linkObjectPromises.push(createLinkObject(messages[i], messageFullApiUrl));
         }
     }
 
@@ -147,27 +145,45 @@ let createLinkObject = function(message, messageUrl) {
  * Get our link data. If it exists in cache and the cache should still be alive (<5 mins from when it was added
  * to the cache), return the cached data. Otherwise, get new data and cache it.
  *
- * @param data
- * @returns {*}
+ * @param data - messages to extract links from
+ * @param messageBaseApiUrl - base api url to get info on a specific message for the current data
+ * @returns {*} - either a cached object or new object holding our links for the specified data
  */
-let cacheData = function(data) {
-    // Get cache timestamp and current time stamp
-    let cacheTime = cachedData['time'];
-    let currentTime = new Date();
+let cacheData = function(data, messageBaseApiUrl) {
+    if(cachedData[messageBaseApiUrl]) {
+        // Get cache timestamp and current time stamp
+        let cacheTime = cachedData[messageBaseApiUrl]['time'];
+        let currentTime = new Date();
 
-    // Get difference between time in minutes
-    let diffMs = (currentTime - cacheTime);
-    let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+        // Get difference between time in minutes
+        let diffMs = (currentTime - cacheTime);
+        let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
 
-    // If the time difference is less than the cache time to live, return cached data
-    if (diffMins < cacheTimeToLive) {
-        return cachedData['links'];
+        // If the time difference is less than the cache time to live, return cached data
+        if (diffMins < cacheTimeToLive) {
+            return cachedData[messageBaseApiUrl]['links'];
+        }
+    } else {
+        cachedData[messageBaseApiUrl] = {};
     }
 
     // Otherwise, get new data, cache it, and return it
-    cachedData['links'] = extractLinkyLinks(data);
-    cachedData['time'] = new Date();
-    return cachedData['links'];
+    cachedData[messageBaseApiUrl]['links'] = extractLinkyLinks(data, messageBaseApiUrl);
+    cachedData[messageBaseApiUrl]['time'] = new Date();
+    return cachedData[messageBaseApiUrl]['links'];
+};
+
+/**
+ * Create a messages api url for the room id passed in.
+ *
+ * @param roomId - roomId to create the message api url for
+ * @returns {string} - messages api url for the given roomId
+ */
+let createMessagesApiUrl = function(roomId) {
+    let isoDate = new Date().toISOString();
+
+    let messageBaseUrl = host + '/v2/room/' + roomId + '/history';
+    return messageBaseUrl + messagesQueryParameters + '&date=' + isoDate;
 };
 
 /* ---------------- */
@@ -175,18 +191,35 @@ let cacheData = function(data) {
 /* ---------------- */
 
 /**
- * Message link history route at root.
+ * Message link history route for the default room.
  */
 server.route({
     method: 'GET',
     path:'/',
     handler: function (request, reply) {
 
-        // Add current date to our query parameters
-        let isoDate = new Date().toISOString();
-        return reply(httpGet(messagesUrl + '&date=' + isoDate).then(data => {
-            // console.log(data);
-            return cacheData(data.items);
+        // Create our api url to get details on a specific message in the current room
+        let messageBaseApiUrl = host + '/v2/room/' + defaultRoomNumber + '/history';
+
+        return reply(httpGet(createMessagesApiUrl(defaultRoomNumber)).then(data => {
+            return cacheData(data.items, messageBaseApiUrl);
+        }));
+    }
+});
+
+/**
+ * Message link history route for a specific room number.
+ */
+server.route({
+    method: 'GET',
+    path:'/room/{roomId}',
+    handler: function (request, reply) {
+
+        // Create our api url to get details on a specific message in the current room
+        let messageBaseApiUrl = host + '/v2/room/' + request.params.roomId + '/history';
+
+        return reply(httpGet(createMessagesApiUrl(request.params.roomId)).then(data => {
+            return cacheData(data.items, messageBaseApiUrl);
         }));
     }
 });
