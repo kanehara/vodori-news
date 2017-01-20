@@ -76,8 +76,6 @@ export default {
       this.loading = true
 
       this.$store.dispatch('CHANGE_PAGE', to).then(() => {
-          return this.$store.dispatch('FETCH_LINKS', this.type)
-      }).then(() => {
           if (this.page < 0 || this.page > this.maxPage) {
               this.$router.replace(`/${this.type}/1`)
               return

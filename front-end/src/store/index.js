@@ -8,7 +8,7 @@ const store = new Vuex.Store({
   state: {
     // The view list type that is active
     activeType: 'new',
-    itemsPerPage: 5,
+    itemsPerPage: 10,
     page: 1,
     links: {
         new: []
@@ -20,8 +20,8 @@ const store = new Vuex.Store({
         return fetchLinks(type).then(links => commit('SET_LINKS', { links, type }))
     },
 
-    CHANGE_PAGE: ({ commit }, { page }) => {
-        commit('SET_PAGE', { page })
+    CHANGE_PAGE: ({ commit }, page) => {
+        Promise.resolve(commit('SET_PAGE', page))
     }
   },
 
@@ -30,7 +30,7 @@ const store = new Vuex.Store({
       state.links[type] = links
     },
 
-    SET_PAGE: (state, { page }) => {
+    SET_PAGE: (state, page) => {
       state.page = page;
     }
   },
@@ -38,7 +38,7 @@ const store = new Vuex.Store({
   getters: {
     links: state => {
       let startIndex = (state.page - 1) * state.itemsPerPage;
-      return state.links[state.activeType].slice(startIndex, state.itemsPerPage);
+      return state.links[state.activeType].slice(startIndex, startIndex + state.itemsPerPage);
     }
   }
 })

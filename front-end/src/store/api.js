@@ -18,7 +18,9 @@ export function fetchLinks(activeType) {
         const val = [];
 
         for (let i = 0; i < 25; ++i) {
-            val.push(russia);
+            let link = Object.assign({}, russia);
+            link.title += i;
+            val.push(link);
         }
 
         if (val) val.__lastUpdated = Date.now()
