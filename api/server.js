@@ -19,8 +19,10 @@ let host = 'https://api.hipchat.com';
 /**
  * Hipchat API parameters
  */
-let authToken = 'uaL27J06UjdzHaQHVvijzGqs2ZYLMBMoAjq6KmyV';   // Expires January 19th, 2018
-let roomNumber = '3502399';
+let authToken = 'GlzFESyyJmiOSdZSNBPb0KyYmv7qr6zTwFgbAkUl';   // Expires January 19th, 2018
+
+// let roomNumber = '3502399';     // Test Room
+let roomNumber = '1839723';     // All the People Room
 
 /**
  * Message history url parameters
@@ -113,13 +115,25 @@ let createLinkObject = function(message, messageUrl) {
             link['from'] = {};
 
             // Extract linky link details
-            link['url'] = linkyLinkDetails['url'];
-            link['description'] = linkyLinkDetails['description'];
-            link['title'] = linkyLinkDetails['title'];
-            link['imageUrl'] = linkyLinkDetails['thumbnail']['url'];
-            link['timestamp'] = data['message']['date'];
-            link['from']['name'] = data['message']['from']['name'];
-            link['from']['mention_name'] = data['message']['from']['mention_name'];
+            try {
+                link['url'] = linkyLinkDetails.url;
+                link['description'] = linkyLinkDetails['description'];
+                link['title'] = linkyLinkDetails['title'];
+
+                // If there is no thumbnail image, set it to null
+                try {
+                    link['imageUrl'] = linkyLinkDetails['thumbnail']['url'];
+                } catch (error) {
+                    link['imageUrl'] = '';
+                }
+
+                link['timestamp'] = data['message']['date'];
+                link['from']['name'] = data['message']['from']['name'];
+                link['from']['mention_name'] = data['message']['from']['mention_name'];
+            } catch (error) {
+                console.error(error);
+                console.log("for linkyLink: " + linkyLinkDetails.stringify());
+            }
 
             resolve(link);
         }).catch(error => {
@@ -171,6 +185,7 @@ server.route({
         // Add current date to our query parameters
         let isoDate = new Date().toISOString();
         return reply(httpGet(messagesUrl + '&date=' + isoDate).then(data => {
+            // console.log(data);
             return cacheData(data.items);
         }));
     }
