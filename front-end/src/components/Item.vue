@@ -49,7 +49,7 @@ export default {
   padding 20px
   border-bottom 1px solid #eee
   line-height 20px
-  height 60px
+  height 70px
   .rail
     float left
     padding: 0px 5px
@@ -63,6 +63,10 @@ export default {
     height: 100%
   .description
     font-size .9em
+    height 20px
+    white-space nowrap
+    overflow hidden
+    text-overflow: ellipsis
   .title
     color #ff6600
     font-size 1.1em
