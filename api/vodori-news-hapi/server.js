@@ -14,23 +14,31 @@ const axios = require('axios');
  * Hapi parameters
  */
 let port = 3000;
-let host = "https://api.hipchat.com";
+let host = 'https://api.hipchat.com';
 
 /**
  * Hipchat API parameters
  */
-let authToken = "uaL27J06UjdzHaQHVvijzGqs2ZYLMBMoAjq6KmyV";   // Expires January 19th, 2018
-let roomNumber = "3502399";
+let authToken = 'uaL27J06UjdzHaQHVvijzGqs2ZYLMBMoAjq6KmyV';   // Expires January 19th, 2018
+let roomNumber = '3502399';
 
 /**
- * Message history url paramters
+ * Message history url parameters
  */
-let messagePath = "/v2/room/" + roomNumber + "/history";
+let messagePath = '/v2/room/' + roomNumber + '/history';
 let maxResults = 1000;
 let reverse = false;
-let queryParameters = "?reverse=" + reverse + "&max-results=" + maxResults + "&auth_token=" + authToken;
-let messagesUrl = host + messagePath + queryParameters;
+let messagesQueryParameters = '?reverse=' + reverse + '&max-results=' + maxResults + '&auth_token=' + authToken;
+let messagesUrl = host + messagePath + messagesQueryParameters;
 let messageUrl = host + messagePath;
+
+/**
+ * Cache parameters
+ */
+let cacheTimeToLive = 5;
+let cachedData = {
+    time: 0
+};
 
 /**
  * Create our server object
@@ -121,6 +129,33 @@ let createLinkObject = function(message, messageUrl) {
     });
 };
 
+/**
+ * Get our link data. If it exists in cache and the cache should still be alive (<5 mins from when it was added
+ * to the cache), return the cached data. Otherwise, get new data and cache it.
+ *
+ * @param data
+ * @returns {*}
+ */
+let cacheData = function(data) {
+    // Get cache timestamp and current time stamp
+    let cacheTime = cachedData['time'];
+    let currentTime = new Date();
+
+    // Get difference between time in minutes
+    let diffMs = (currentTime - cacheTime);
+    let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+
+    // If the time difference is less than the cache time to live, return cached data
+    if (diffMins < cacheTimeToLive) {
+        return cachedData['links'];
+    }
+
+    // Otherwise, get new data, cache it, and return it
+    cachedData['links'] = extractLinkyLinks(data);
+    cachedData['time'] = new Date();
+    return cachedData['links'];
+};
+
 /* ---------------- */
 /* Server functions */
 /* ---------------- */
@@ -133,8 +168,10 @@ server.route({
     path:'/',
     handler: function (request, reply) {
 
-        return reply(httpGet(messagesUrl).then(data => {
-            return extractLinkyLinks(data.items);
+        // Add current date to our query parameters
+        let isoDate = new Date().toISOString();
+        return reply(httpGet(messagesUrl + '&date=' + isoDate).then(data => {
+            return cacheData(data.items);
         }));
     }
 });
