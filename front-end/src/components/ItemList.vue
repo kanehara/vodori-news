@@ -18,7 +18,6 @@
 import Spinner from './Spinner.vue'
 import NewsListNav from './NewsListNav.vue'
 import Item from './Item.vue'
-import { watchList } from '../store/api'
 
 let isInitialRender = true
 
@@ -44,7 +43,7 @@ export default {
       // we need these local state so that we can precisely control the timing
       // of the transitions.
       displayedPage: isInitialRender ? Number(this.$store.state.route.params.page) || 1 : -1,
-      displayedItems: isInitialRender ? this.$store.getters.activeItems : []
+      displayedItems: isInitialRender ? this.$store.getters.links : []
     }
     isInitialRender = false;
     return data
@@ -55,8 +54,8 @@ export default {
       return Number(this.$store.state.route.params.page) || 1
     },
     maxPage () {
-      const { itemsPerPage, lists } = this.$store.state
-      return Math.ceil(lists[this.type].length / itemsPerPage)
+      const { itemsPerPage, links } = this.$store.state
+      return Math.ceil(links[this.type].length / itemsPerPage)
     }
   },
 
@@ -64,17 +63,6 @@ export default {
     if (this.$root._isMounted) {
       this.loadItems(this.page)
     }
-    // watch the current list for realtime updates
-//    this.unwatchList = watchList(this.type, ids => {
-//      this.$store.commit('SET_LIST', { type: this.type, ids })
-//      this.$store.dispatch('ENSURE_ACTIVE_ITEMS').then(() => {
-//        this.displayedItems = this.$store.getters.activeItems
-//      })
-//    })
-  },
-
-  beforeDestroy () {
-//    this.unwatchList()
   },
 
   watch: {
@@ -86,9 +74,7 @@ export default {
   methods: {
     loadItems (to = this.page, from = -1) {
       this.loading = true
-      this.$store.dispatch('FETCH_LIST_DATA', {
-        type: this.type
-      }).then(() => {
+      this.$store.dispatch('FETCH_LINKS', this.type).then(() => {
         if (this.page < 0 || this.page > this.maxPage) {
           this.$router.replace(`/${this.type}/1`)
           return
@@ -97,7 +83,7 @@ export default {
           ? null
           : to > from ? 'slide-left' : 'slide-right'
         this.displayedPage = to
-        this.displayedItems = this.$store.getters.activeItems
+        this.displayedItems = this.$store.getters.links
         this.loading = false
       })
     }

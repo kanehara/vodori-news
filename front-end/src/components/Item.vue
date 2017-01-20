@@ -6,9 +6,6 @@
         <span class="host"> ({{ item.description }})</span>
         <span class="host"> ({{ item.url }})</span>
       </template>
-      <template v-else>
-        <router-link :to="'/item/' + item.url">{{ item.title }}</router-link>
-      </template>
     </span>
     <br>
     <span class="meta">
@@ -25,14 +22,9 @@ import { timeAgo } from '../filters'
 export default {
   name: 'news-item',
   props: ['item'],
-  // https://github.com/vuejs/vue/blob/next/packages/vue-server-renderer/README.md#component-caching
   serverCacheKey: props => {
     return `${
       props.item.timestamp
-    }::${
-      props.item.__lastUpdated
-    }::${
-      timeAgo(props.item.time)
     }`
   }
 }
