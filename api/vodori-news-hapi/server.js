@@ -108,7 +108,8 @@ let createLinkObject = function(message, messageUrl) {
             link['url'] = linkyLinkDetails['url'];
             link['description'] = linkyLinkDetails['description'];
             link['title'] = linkyLinkDetails['title'];
-            link['image'] = linkyLinkDetails['thumbnail']['url'];
+            link['imageUrl'] = linkyLinkDetails['thumbnail']['url'];
+            link['timestamp'] = data['message']['date'];
             link['from']['name'] = data['message']['from']['name'];
             link['from']['mention_name'] = data['message']['from']['mention_name'];
 
