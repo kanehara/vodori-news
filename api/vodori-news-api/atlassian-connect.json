@@ -35,6 +35,13 @@
       "name": "Hello!",
       "authentication": "jwt"
     },
+    "test": {
+      "url": "{{localBaseUrl}}/testing",
+      "pattern": "^/test",
+      "event": "room_message",
+      "name": "Testing!",
+      "authentication": "jwt"
+    },
     "glance": [
       {
         "name": {
