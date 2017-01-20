@@ -10,7 +10,7 @@
         <a :href="item.url" target="_blank" class="title">{{ item.title }}</a>
         <span class="host"> ({{ url }})</span>
         <div class="description"> {{ item.description }}</div>
-        <div class="meta">Posted: {{ timestamp }}</div>
+        <div class="meta">{{item.from.name}} posted on: {{ timestamp }}</div>
       </div>
     </template>
   </li>
@@ -30,7 +30,7 @@ export default {
   computed: {
       timestamp() {
           let date = new Date(this.item.timestamp)
-          return date && date.toDateString()
+          return date && date.toDateString() + ' ' + date.toLocaleTimeString()
       },
       url() {
           let url = this.item.url
