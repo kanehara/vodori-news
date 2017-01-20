@@ -21,11 +21,13 @@ export function fetchLinks(activePage) {
     return new Promise((resolve, reject) => {
         axios
             .get(endpoint)
-            .then(({ data }) => {
+            .then(({data}) => {
                 if (data) data.__lastUpdated = Date.now()
                 resolve(data)
             })
-            .catch((err) => console.log(err))
-
+            .catch((err) => {
+                console.log(err)
+                reject(err)
+            })
     })
 }
