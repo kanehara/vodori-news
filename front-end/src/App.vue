@@ -3,12 +3,9 @@
     <header class="header">
       <nav class="inner">
         <router-link to="/" exact>
-          <img class="logo" src="~public/logo-48.png" alt="logo">
+          <img class="logo" src="~public/vodori_flat_logo.png" alt="logo">
         </router-link>
-        <router-link to="/new">New</router-link>
-        <a class="github" href="https://github.com/vuejs/vue-hackernews-2.0" target="_blank">
-          Built with Vue.js
-        </a>
+        <router-link to="/new">Newest</router-link>
       </nav>
     </header>
     <transition name="fade" mode="out-in">
@@ -32,7 +29,7 @@ a
   text-decoration none
 
 .header
-  background-color #ff6600
+  background-color lightgray
   position fixed
   z-index 999
   height 55px
@@ -60,14 +57,9 @@ a
       font-weight 400
     &:nth-child(6)
       margin-right 0
-  .github
-    color #fff
-    font-size .9em
-    margin 0
-    float right
 
 .logo
-  width 24px
+  width 100px
   margin-right 10px
   display inline-block
   vertical-align middle
@@ -90,6 +82,4 @@ a
       padding 15px
     a
       margin-right 1em
-    .github
-      display none
 </style>
