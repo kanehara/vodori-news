@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <spinner :show="loading"></spinner>
     <news-list-nav :page="page" :maxPage="maxPage" :type="type" v-if="displayedPage > 0"></news-list-nav>
     <transition :name="transition">
