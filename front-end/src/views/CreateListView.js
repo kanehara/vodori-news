@@ -8,7 +8,9 @@ export function createListView (type) {
     name: `${type}-stories-view`,
     // this will be called during SSR to pre-fetch data into the store!
     preFetch (store) {
-        store.dispatch('CHANGE_PAGE', store.state.route.params.page)
+        let page = store.state.route.params.page
+        page = page ? page : 1
+        store.dispatch('CHANGE_PAGE', page)
         return store.dispatch('FETCH_LINKS', { type })
     },
     render (h) {
