@@ -1,16 +1,15 @@
 <template>
   <li class="news-item">
-    <span class="title">
-      <template v-if="item.url">
-        <a :href="item.url" target="_blank">{{ item.title }}</a>
-        <span class="host"> ({{ item.description }})</span>
-        <span class="host"> ({{ item.url }})</span>
-      </template>
-    </span>
-    <br>
+    <template v-if="item.url">
+      <a :href="item.url" target="_blank" class="title">{{ item.title }}</a>
+      <span class="host"> ({{ url }})</span>
+      <br/>
+      <span class="description"> {{ item.description }}</span>
+      <br/>
+    </template>
     <span class="meta">
       <span class="time">
-        Posted: {{ item.timestamp }}
+        Posted: {{ timestamp }}
       </span>
     </span>
   </li>
@@ -26,17 +25,35 @@ export default {
     return `${
       props.item.timestamp
     }`
+  },
+  computed: {
+      timestamp() {
+          let date = new Date(this.item.timestamp)
+          return date && date.toDateString()
+      },
+      url() {
+          let url = this.item.url
+          // Remove http://www.
+          url = url.replace(/.*?:\/\/(www\.)?/g, "")
+          // Get domain
+          return url.split('/')[0]
+      }
   }
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .news-item
   background-color #fff
   padding 20px 30px 20px 80px
   border-bottom 1px solid #eee
   position relative
   line-height 20px
+  .description
+    font-size .9em
+  .title
+    color #ff6600
+    font-size 1.1em
   .score
     color #ff6600
     font-size 1.1em
