@@ -21,8 +21,8 @@ let host = 'https://api.hipchat.com';
  */
 let authToken = 'GlzFESyyJmiOSdZSNBPb0KyYmv7qr6zTwFgbAkUl';   // Expires January 19th, 2018
 
-// let defaultRoomNumber = '3502399';     // Test Room
-let defaultRoomNumber = '1839723';     // All the People Room
+let defaultRoomNumber = '3502399';     // Test Room
+// let defaultRoomNumber = '1839723';     // All the People Room
 
 /**
  * Message history url parameters
