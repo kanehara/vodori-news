@@ -11,9 +11,12 @@ export default new Router({
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
-    { path: '/new/:page(\\d+)?', component: createListView('new') },
-    { path: '/item/:id(\\d+)', component: ItemView },
-    { path: '/user/:id', component: UserView },
-    { path: '/', redirect: '/new' }
+    { path: '/vodori-news/:page(\\d+)?', component: createListView('vodori-news') },
+    { path: '/vodori-news', redirect: '/vodori-news/1'},
+    { path: '/all-the-people/:page(\\d+)?', component: ItemView },
+    { path: '/all-the-people', redirect: '/all-the-people/1'},
+    { path: '/dev-io/:page(\\d+)?', component: ItemView },
+    { path: '/dev-io', redirect: '/dev-io/1'},
+    { path: '/', redirect: '/vodori-news/1' }
   ]
 })

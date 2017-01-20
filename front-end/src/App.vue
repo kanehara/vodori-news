@@ -5,7 +5,9 @@
         <router-link to="/" exact>
           <img class="logo" src="~public/vodori_flat_logo.png" alt="logo">
         </router-link>
-        <router-link to="/new">Newest</router-link>
+        <router-link to="/all-the-people">All the People</router-link>
+        <router-link to="/dev-io">Dev IO</router-link>
+        <router-link to="/vodori-news">VodoriNews</router-link>
       </nav>
     </header>
     <transition name="fade" mode="out-in">

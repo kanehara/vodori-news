@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-export function fetchLinks(activeType) {
+export function fetchLinks(activePage) {
     return new Promise((resolve, reject) => {
         // TODO: Make API call to HAPI server
-        // TODO: Use activeType to get different links list
 
         let russia = {
             "timestamp": "2017-01-20T01:53:54.706749+00:00",

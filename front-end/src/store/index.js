@@ -6,12 +6,14 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    // The view list type that is active
-    activeType: 'new',
+    // The selected room
+    activePage: 'vodori-news',
     itemsPerPage: 10,
     page: 1,
     links: {
-        new: []
+        "vodori-news": [],
+        "dev-io": [],
+        "all-the-people": []
     }
   },
 
@@ -38,7 +40,7 @@ const store = new Vuex.Store({
   getters: {
     links: state => {
       let startIndex = (state.page - 1) * state.itemsPerPage;
-      return state.links['new'].slice(startIndex, startIndex + state.itemsPerPage);
+      return state.links['vodori-news'].slice(startIndex, startIndex + state.itemsPerPage);
     }
   }
 })
