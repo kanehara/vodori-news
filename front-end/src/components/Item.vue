@@ -1,18 +1,18 @@
 <template>
   <li class="news-item">
-    <span class="title">
-      <template v-if="item.url">
-        <a :href="item.url" target="_blank">{{ item.title }}</a>
-        <span class="host"> ({{ item.description }})</span>
-        <span class="host"> ({{ item.url }})</span>
-      </template>
-    </span>
-    <br>
-    <span class="meta">
-      <span class="time">
-        Posted: {{ item.timestamp }}
-      </span>
-    </span>
+    <template v-if="item.url">
+      <div class="left rail">
+        <a :href="item.url">
+          <img v-if="item.imageUrl" :src="item.imageUrl" class="preview-img"/>
+        </a>
+      </div>
+      <div class="right rail">
+        <a :href="item.url" target="_blank" class="title">{{ item.title }}</a>
+        <span class="host"> ({{ url }})</span>
+        <div class="description"> {{ item.description }}</div>
+        <div class="meta">Posted: {{ timestamp }}</div>
+      </div>
+    </template>
   </li>
 </template>
 
@@ -26,27 +26,46 @@ export default {
     return `${
       props.item.timestamp
     }`
+  },
+  computed: {
+      timestamp() {
+          let date = new Date(this.item.timestamp)
+          return date && date.toDateString()
+      },
+      url() {
+          let url = this.item.url
+          // Remove http://www.
+          url = url.replace(/.*?:\/\/(www\.)?/g, "")
+          // Get domain
+          return url.split('/')[0]
+      }
   }
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .news-item
   background-color #fff
-  padding 20px 30px 20px 80px
+  padding 20px
   border-bottom 1px solid #eee
-  position relative
   line-height 20px
-  .score
+  height 60px
+  .rail
+    float left
+    padding: 0px 5px
+    box-sizing border-box
+    &.right
+      width: 90%
+    &.left
+      width: 10%
+  .preview-img
+    width: 100%
+    height: 100%
+  .description
+    font-size .9em
+  .title
     color #ff6600
     font-size 1.1em
-    font-weight 700
-    position absolute
-    top 50%
-    left 0
-    width 80px
-    text-align center
-    margin-top -10px
   .meta, .host
     font-size .85em
     color #999

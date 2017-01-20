@@ -74,17 +74,18 @@ export default {
   methods: {
     loadItems (to = this.page, from = -1) {
       this.loading = true
-      this.$store.dispatch('FETCH_LINKS', this.type).then(() => {
-        if (this.page < 0 || this.page > this.maxPage) {
-          this.$router.replace(`/${this.type}/1`)
-          return
-        }
-        this.transition = from === -1
-          ? null
-          : to > from ? 'slide-left' : 'slide-right'
-        this.displayedPage = to
-        this.displayedItems = this.$store.getters.links
-        this.loading = false
+
+      this.$store.dispatch('CHANGE_PAGE', to).then(() => {
+          if (this.page < 0 || this.page > this.maxPage) {
+              this.$router.replace(`/${this.type}/1`)
+              return
+          }
+          this.transition = from === -1
+              ? null
+              : to > from ? 'slide-left' : 'slide-right'
+          this.displayedPage = to
+          this.displayedItems = this.$store.getters.links
+          this.loading = false
       })
     }
   }
