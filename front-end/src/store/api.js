@@ -19,13 +19,28 @@ function fetch (child) {
     return Promise.resolve(cache.get(child))
   } else {
     return new Promise((resolve, reject) => {
-      api.child(child).once('value', snapshot => {
-        const val = snapshot.val()
-        // mark the timestamp when this item is cached
+      // api.child(child).once('value', snapshot => {
+      //   const val = snapshot.val()
+      //   // mark the timestamp when this item is cached
+      //   if (val) val.__lastUpdated = Date.now()
+      //   cache && cache.set(child, val)
+      //   resolve(val)
+      // }, reject)
+
+        const val = [{
+            "timestamp": "2017-01-20T01:53:54.706749+00:00",
+            "url": "https://www.washingtonpost.com/news/worldviews/wp/2017/01/19/facebook-temporarily-blocked-rt-and-moscow-isnt-happy/?utm_term=.40173b487f91",
+            "description": "test",
+            "title": "Russia stinks",
+            "image": "none",
+            "from": {
+                "mention_name": "da BEN",
+                "name": "Ben"
+            }
+        }]
         if (val) val.__lastUpdated = Date.now()
         cache && cache.set(child, val)
         resolve(val)
-      }, reject)
     })
   }
 }

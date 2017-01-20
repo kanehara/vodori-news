@@ -1,25 +1,21 @@
 <template>
   <li class="news-item">
-    <span class="score">{{ item.score }}</span>
     <span class="title">
       <template v-if="item.url">
         <a :href="item.url" target="_blank">{{ item.title }}</a>
-        <span class="host"> ({{ item.url | host }})</span>
+        <span class="host"> ({{ item.description }})</span>
+        <span class="host"> ({{ item.url }})</span>
       </template>
       <template v-else>
-        <router-link :to="'/item/' + item.id">{{ item.title }}</router-link>
+        <router-link :to="'/item/' + item.url">{{ item.title }}</router-link>
       </template>
     </span>
     <br>
     <span class="meta">
-      <span v-if="item.type !== 'job'" class="by">
-        by <router-link :to="'/user/' + item.by">{{ item.by }}</router-link>
-      </span>
       <span class="time">
-        {{ item.time | timeAgo }} ago
+        Posted: {{ item.timestamp }}
       </span>
     </span>
-    <span class="label" v-if="item.type !== 'story'">{{ item.type }}</span>
   </li>
 </template>
 
@@ -32,7 +28,7 @@ export default {
   // https://github.com/vuejs/vue/blob/next/packages/vue-server-renderer/README.md#component-caching
   serverCacheKey: props => {
     return `${
-      props.item.id
+      props.item.timestamp
     }::${
       props.item.__lastUpdated
     }::${

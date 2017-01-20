@@ -5,7 +5,7 @@
     <transition :name="transition">
       <div class="news-list" :key="displayedPage" v-if="displayedPage > 0">
         <transition-group tag="ul" name="item">
-          <item v-for="item in displayedItems" :key="item.id" :item="item">
+          <item v-for="item in displayedItems" :key="item.timestamp" :item="item">
           </item>
         </transition-group>
       </div>
@@ -46,7 +46,7 @@ export default {
       displayedPage: isInitialRender ? Number(this.$store.state.route.params.page) || 1 : -1,
       displayedItems: isInitialRender ? this.$store.getters.activeItems : []
     }
-    isInitialRender = false
+    isInitialRender = false;
     return data
   },
 
@@ -65,16 +65,16 @@ export default {
       this.loadItems(this.page)
     }
     // watch the current list for realtime updates
-    this.unwatchList = watchList(this.type, ids => {
-      this.$store.commit('SET_LIST', { type: this.type, ids })
-      this.$store.dispatch('ENSURE_ACTIVE_ITEMS').then(() => {
-        this.displayedItems = this.$store.getters.activeItems
-      })
-    })
+//    this.unwatchList = watchList(this.type, ids => {
+//      this.$store.commit('SET_LIST', { type: this.type, ids })
+//      this.$store.dispatch('ENSURE_ACTIVE_ITEMS').then(() => {
+//        this.displayedItems = this.$store.getters.activeItems
+//      })
+//    })
   },
 
   beforeDestroy () {
-    this.unwatchList()
+//    this.unwatchList()
   },
 
   watch: {
