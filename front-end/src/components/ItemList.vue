@@ -75,7 +75,7 @@ export default {
     loadItems (to = this.page, from = -1) {
       this.loading = true
 
-      this.$store.dispatch('CHANGE_PAGE', to).then(() => {
+      this.$store.dispatch('CHANGE_PAGINATION', to).then(() => {
           if (this.page < 0 || this.page > this.maxPage) {
               this.$router.replace(`/${this.type}/1`)
               return
