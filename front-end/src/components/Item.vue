@@ -2,7 +2,9 @@
   <li class="news-item">
     <template v-if="item.url">
       <div class="left rail">
-        <img v-if="item.imageUrl" :src="item.imageUrl" class="preview-img"/>
+        <a :href="item.url">
+          <img v-if="item.imageUrl" :src="item.imageUrl" class="preview-img"/>
+        </a>
       </div>
       <div class="right rail">
         <a :href="item.url" target="_blank" class="title">{{ item.title }}</a>
