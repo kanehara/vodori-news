@@ -50,6 +50,33 @@ $(document).ready(function () {
     });
   }
 
+  function testing(callback) {
+
+      HipChat.auth.withToken(function (err, token) {
+          if (!err) {
+              //Then, make an AJAX call to the add-on backend, including the JWT token
+              //Server-side, the JWT token is validated using the middleware function addon.authenticate()
+              $.ajax(
+                  {
+                      type: 'POST',
+                      url: '/send_notification',
+                      headers: {'Authorization': 'JWT ' + token},
+                      dataType: 'json',
+                      data: {messageTitle: 'Hello World!'},
+                      success: function () {
+                          console.log('success!');
+                          callback(false);
+                      },
+                      error: function () {
+                          console.log('failure!');
+                          callback(true);
+                      }
+                  });
+          }
+      })
+
+  }
+
   /* Functions used by sidebar.hbs */
 
   $('#say_hello').on('click', function () {

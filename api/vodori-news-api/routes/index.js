@@ -161,10 +161,29 @@ module.exports = function (app, addon) {
             console.log("got data");
         });
         hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'pong')
+      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'hey!!')
         .then(function (data) {
           res.sendStatus(200);
         });
     }
+    );
+
+    // This is an example route to handle an incoming webhook
+    // https://developer.atlassian.com/hipchat/guide/webhooks
+    app.get('/testing',
+        // addon.authenticate(),
+        // function (req, res) {
+        //     hipchat.sendMessage(req.clientInfo, '3502399', 'testingtesting! Hey Ryan!')
+        //         .then(function (data) {
+        //             res.sendStatus(200);
+        //         });
+        // }
+
+
+        function() {
+            res.sendStatus(200);
+            return "hello!";
+        }
     );
 
   // Notify the room that the add-on was installed. To learn more about
