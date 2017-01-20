@@ -137,6 +137,13 @@ module.exports = function(addon) {
           }]
         }
       });
-    }
+    },
+
+      getRecentMessages: function(clientInfo, roomId, date) {
+        return request(clientInfo, {
+            method: 'GET',
+            resource: '/room/' + roomId + "/history?date=" + date + "&max-results=1000"
+        })
+      }
   };
 };

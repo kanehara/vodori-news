@@ -37,6 +37,13 @@ module.exports = function (app, addon) {
     }
     );
 
+  app.get('/api', addon.authenticate(),
+      function(req, res) {
+          var date = new Date();
+          console.log(hipchat.getRecentMessages(req.clientInfo, req.roomId, date.toISOString()));
+      }
+  );
+
   // This is an example route that's used by the default for the configuration page
   // https://developer.atlassian.com/hipchat/guide/configuration-page
   app.get('/config',
@@ -147,7 +154,13 @@ module.exports = function (app, addon) {
   app.post('/webhook',
     addon.authenticate(),
     function (req, res) {
-      hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'pong')
+        var date = new Date();
+        console.log('getting recent messages');
+        hipchat.getRecentMessages(req.clientInfo, req.identity.roomId, date.toISOString()).then(function(data){
+            console.log(JSON.stringify(data));
+            console.log("got data");
+        });
+        hipchat.sendMessage(req.clientInfo, req.identity.roomId, 'pong')
         .then(function (data) {
           res.sendStatus(200);
         });

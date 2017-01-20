@@ -3,6 +3,7 @@
         "usePublicKey": false,
         "watch": false,
         "port": 3000,
+        "localBaseUrl": "http://6a2a2ebc.ngrok.io",
         "maxTokenAge": 86400,
         "store": {
             "adapter": "jugglingdb",
@@ -13,7 +14,7 @@
     "production": {
         "usePublicKey": false,
         "port": "$PORT",
-        "localBaseUrl": " http://6a2a2ebc.ngrok.io",
+        "localBaseUrl": "http://6a2a2ebc.ngrok.io",
         "store": {
             "adapter": "redis",
             "url": "$REDIS_URL"

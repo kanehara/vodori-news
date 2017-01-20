@@ -14,7 +14,8 @@
     "hipchatApiConsumer": {
       "scopes": [
         "send_notification",
-        "view_room"
+        "view_room",
+        "view_messages"
       ],
       "avatar": {
         "url": "{{localBaseUrl}}/img/logo.png",
