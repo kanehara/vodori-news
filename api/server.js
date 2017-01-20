@@ -224,6 +224,16 @@ server.route({
     }
 });
 
+server.route({
+    method: 'GET',
+    path:'/clearCache',
+    handler: function (request, reply) {
+
+        cachedData = {};
+        return reply("Cache cleared.");
+    }
+});
+
 /**
  * Start our server.
  */
