@@ -18,9 +18,15 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    FETCH_LINKS: ({ commit }, { type } ) => {
+    FETCH_LINKS: ({ state, commit }, { type } ) => {
+      if (state.activePage !== type) {
         commit('SET_ACTIVE_PAGE', { type })
-        return fetchLinks(type).then(links => commit('SET_LINKS', { links, type }))
+      }
+      let storedLinks = state.links[type];
+      if (storedLinks.length < 1) {
+        storedLinks = fetchLinks(type).then(links => commit('SET_LINKS', { links, type }))
+      }
+      return storedLinks
     },
 
     CHANGE_PAGINATION: ({ commit }, page) => {
