@@ -45,7 +45,7 @@ const store = new Vuex.Store({
   getters: {
     links: state => {
       let startIndex = (state.page - 1) * state.itemsPerPage;
-      return state.links['vodori-news'].slice(startIndex, startIndex + state.itemsPerPage);
+      return state.links[state.activePage].slice(startIndex, startIndex + state.itemsPerPage);
     }
   }
 })
