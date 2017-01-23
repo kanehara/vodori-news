@@ -10,7 +10,7 @@ export function createListView (type) {
     preFetch (store) {
         let page = store.state.route.params.page
         page = page ? page : 1
-        store.dispatch('CHANGE_PAGINATION', page)
+        store.commit('SET_PAGE', page)
         return store.dispatch('FETCH_LINKS', { type })
     },
     render (h) {

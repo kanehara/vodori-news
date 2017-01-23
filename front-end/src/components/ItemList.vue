@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div class="news-view">
     <spinner :show="loading"></spinner>
     <news-list-nav :page="page" :maxPage="maxPage" :type="type" v-if="displayedPage > 0"></news-list-nav>
     <transition :name="transition">
@@ -83,7 +83,7 @@ export default {
           this.transition = from === -1
               ? null
               : to > from ? 'slide-left' : 'slide-right'
-          this.$store.dispatch('CHANGE_PAGINATION', to)
+          this.$store.commit('SET_PAGE', to)
           this.displayedPage = to
           this.displayedItems = this.$store.getters.links
           this.loading = false

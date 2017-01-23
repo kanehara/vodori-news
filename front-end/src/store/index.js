@@ -27,10 +27,6 @@ const store = new Vuex.Store({
         storedLinks = fetchLinks(type).then(links => commit('SET_LINKS', { links, type }))
       }
       return storedLinks
-    },
-
-    CHANGE_PAGINATION: ({ commit }, page) => {
-        Promise.resolve(commit('SET_PAGE', page))
     }
   },
 
