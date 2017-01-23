@@ -1,19 +1,16 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
+import {createListView} from "../views/CreateListView";
 
 Vue.use(Router)
-
-import { createListView } from '../views/CreateListView'
-import ItemView from '../views/ItemView.vue'
-import UserView from '../views/UserView.vue'
 
 export default new Router({
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: [
-    { path: '/new/:page(\\d+)?', component: createListView('new') },
-    { path: '/item/:id(\\d+)', component: ItemView },
-    { path: '/user/:id', component: UserView },
-    { path: '/', redirect: '/new' }
+    { path: '/vodori-news/:page(\\d+)?', component: createListView('vodori-news') },
+    { path: '/all-the-people/:page(\\d+)?', component: createListView('all-the-people') },
+    { path: '/dev-io/:page(\\d+)?', component: createListView('dev-io') },
+    { path: '/', redirect: '/vodori-news' }
   ]
 })

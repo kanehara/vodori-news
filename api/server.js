@@ -45,7 +45,10 @@ let cachedData = {
 const server = new Hapi.Server();
 server.connection({
     host: 'localhost',
-    port: port
+    port: port,
+    routes: {
+        cors: true
+    }
 });
 
 /* ---------------- */
@@ -203,6 +206,8 @@ server.route({
 
         return reply(httpGet(createMessagesApiUrl(defaultRoomNumber)).then(data => {
             return cacheData(data.items, messageBaseApiUrl);
+        }).catch((err) => {
+            console.log(err);
         }));
     }
 });
@@ -220,6 +225,8 @@ server.route({
 
         return reply(httpGet(createMessagesApiUrl(request.params.roomId)).then(data => {
             return cacheData(data.items, messageBaseApiUrl);
+        }).catch((err) => {
+            console.log(err)
         }));
     }
 });
